@@ -1,0 +1,18 @@
+{
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "files.autoSave": "afterDelay",
+                "files.autoSaveDelay": 1,
+                "editor.bracketPairColorization.enabled": true
+            },
+            "extensions": [
+                "ms-python.vscode-pylance",
+                "ms-python.python",
+                "streetsidesoftware.code-spell-checker",
+                "ms-toolsai.jupyter"
+            ]
+        }
+    },
+    "postCreateCommand": "pip3 install -r pyModuleRequirements.txt"
+}
