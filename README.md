@@ -8,9 +8,3 @@ Feel free to commit if you have some changes. If it is a small change, just go a
 Otherwise, if you are deploying a new feature, create a new branch, just so we can work concurrently
 
 Yay us!
-
-!!!!!!!!!!!!!!!!!
-111111111 
-2222222222
-3333
-444
