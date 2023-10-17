@@ -1,0 +1,38 @@
+MEMORANDUM:
+To: Dr. Martin Ortega, Lead Engineer, L3Harris MITEER Project Oversight Team
+From: Team 74
+Subject: REQUEST FOR ADDITIONAL INFORMATION
+
+Team 74 requests answers to the following questions from the Project Oversight Team.
+
+Sincerely,
+
+Team 74
+
+============================================================
+
+Team Member Names:
+1) Micah Robinson
+2) Mitch McCormick
+3) Amanda Zheng
+4) Savannah Hoar
+============================================================
+Question 1: Will our device be required to operate below the max speed for the entire mission demonstration or just during the speed control demonstration?
+============================================================
+Answer: It is expected that the MACRO still not exceed the speed value listed for the speed demonstration within the context of the main demonstration
+============================================================
+Question 2: Will our device be allowed to take multiple trips to the drop off location, recollecting cargo at the launch site, or are we limited to one trip?
+============================================================
+Answer: Only one successful delivery (i.e. one cargo in both type and quantity) needs to be done in order to receive a mission completion. However, multiple deliveries, types of cargo, and amount of cargo delivered will be favored by NASA.
+============================================================
+Question 3: Will the clearing system at the drop off point clear each time a piece of cargo is placed, or after all carried pieces are placed?
+============================================================
+Answer: This will be done once the robot clears the drop-off zone.
+============================================================
+Question 4: Will each cargo type be available in the same quantity during the project demonstration?
+============================================================
+Answer: One of each type of cargo will be available.
+============================================================
+Question 5: Will we be required / allowed to drop off cargo at multiple sites?
+============================================================
+Answer: Each team receives a drop-off location per trip. The MACRO will not be going to multiple drop-off locations per trip. The location may change between trips.

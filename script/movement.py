@@ -20,8 +20,8 @@ class MotorStallException(Exception):
 
 # This function can either take a position (cm) for the robot to travel and/or
 # a speed (cm/s) for it to travel at. Default speed is 15 cm/s
-def forward(speed = BASE_SPEED, position = False):
-    
+def forward(speed = BASE_SPEED, position = False, dir_change = -1):
+    speed = speed * dir_change
     # Error checking for inputted values for position
     if position:
         if type(position) is not int or type(position) is not float:

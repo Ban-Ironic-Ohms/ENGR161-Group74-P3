@@ -1,5 +1,5 @@
 class LargeLegoMotor:
-    power_to_speed = 10 # takes power in the given units and gives speed in cm/s
+    power_to_speed = 1.27 # takes power in the given units and gives speed in cm/s
     delta_encoder_to_position = 10 # takes change in encoder position and gives a change in position in cm
     
     
