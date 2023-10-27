@@ -4,5 +4,5 @@ class LargeLegoMotor:
     
     
 class SmallLegoMotor:
-    full_turn_from_zero = 40 # gives a change in encoder value that turns the wheels fully one way or another 
+    full_turn_from_zero = 30 # gives a change in encoder value that turns the wheels fully one way or another 
     # 1/4 turn

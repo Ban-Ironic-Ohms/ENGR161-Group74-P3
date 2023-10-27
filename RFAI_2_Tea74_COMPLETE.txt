@@ -1,0 +1,101 @@
+MEMORANDUM:
+
+
+To: Dr. Martin Ortega, Lead Engineer, L3Harris MITEER Project Oversight Team
+
+
+From: Team 74
+
+
+Subject: REQUEST FOR ADDITIONAL INFORMATION
+
+
+
+
+
+Team 74 requests answers to the following questions from the Project Oversight Team.
+
+
+
+
+
+Sincerely,
+
+
+
+
+
+Team 74
+
+
+
+
+
+============================================================
+
+
+
+
+
+
+
+Team Member Names:
+
+
+1) Micah Robinson
+
+
+2) Mitch McCormick
+
+
+3) Amanda Zheng
+
+
+4) Savannah Hoar
+
+
+============================================================
+
+Question 1: If we, as allowed in the project description, use code from other sources that have a copyleft license, are we required/allowed to follow that license and publish our code publicly?
+
+============================================================
+
+Answer: It is expected that teams must adhere to any legal restrictions if using code from external sources.
+
+============================================================
+
+Question 2: How close to provided materials can we get when manufacturing our own? For example, we are given a Technic Beam 15, but LEGO does not make a Technic Beam 16. Are we allowed to design our own 16-lone beam that interfaces with the given materials?
+
+============================================================
+
+Answer: 3D Parts may emulate lego pieces as long as the design file is done by the design team itself and not obtained from another source.
+
+============================================================
+
+Question 3: Can you provide clarity on the instruction "Also, raw materials should not be hand machined." Does this mean we may ONLY use CNC machines (3d printers, metal mills), and NOT tools like a drill press or sand paper?
+
+============================================================
+
+Answer: Only do so if the change is extremely minor (i.e. shaving down an edge to better fit a produced component). If you are unsure, ask a TA at office hours. 
+
+============================================================
+
+Question 4: Is there a limit on the different "raw materials" that can be used? For example, can we machine metal parts? Wood parts? Composites?
+
+============================================================
+
+Answer: Any materials that are acceptable to use in the machine shops on campus. Speak with representatives from those shops in order to find out what is acceptable for each machine.
+
+============================================================
+
+Question 5: Will areas with broken or dotted lines be marked on the provided map?
+
+============================================================
+
+Answer: Yes.
+
+ENGR 161: RFAI 2
+Vijay, Vishnu
+​Savannah R Hoar;​​​
+​
+
