@@ -21,9 +21,9 @@ Question 1: What is the specific, numeric strength of the magnet in the track?
 ============================================================
 Question 2: What is the coefficient of friction between the lego wheel tire and the surface of the ramp obstacle?
 ============================================================
-Question 3: 
+Question 3: On what date will the map/survey data be available to teams?
 ============================================================
-Question 4: 
+Question 4: How will autonomy be evaluated? The description says "as little intervention from humans as possible," so how is that measured/scored?
 ============================================================
-Question 5: 
+Question 5: What is the radius of the acceptable drop off zone?
 ============================================================
