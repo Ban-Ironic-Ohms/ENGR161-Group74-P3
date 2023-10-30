@@ -10,18 +10,20 @@ R_LF_PORT = 2
 grovepi.pinMode(L_LF_PORT,"INPUT")
 grovepi.pinMode(R_LF_PORT,"INPUT")
 
-def followSolid():
+def followSolid(speed=10):
     while True:
         if grovepi.digitalRead(R_LF_PORT) == 0 and grovepi.digitalRead(L_LF_PORT) == 0:
             print("no lines detected")
-            mv.turn(0, 10)
-            mv.forward(10)
-        if grovepi.digitalRead(R_LF_PORT) == 1:
+            mv.turn(0)
+            mv.forward(speed)
+        if grovepi.digitalRead(R_LF_PORT) == 1 and grovepi.digitalRead(L_LF_PORT) == 1:\
+            print("both lines detected, something BAD has happened")
+        elif grovepi.digitalRead(R_LF_PORT) == 1:
             print("line detected by right sensor")
-            mv.turn(-1, 10)
-            mv.forward(10)
-        if grovepi.digitalRead(L_LF_PORT) == 1:
+            mv.turn(-1)
+            mv.forward(speed)
+        elif grovepi.digitalRead(L_LF_PORT) == 1:
             print("line detected by left sensor")
-            mv.turn(1, 10)
-            mv.forward(10)
-        time.sleep(0.05)
+            mv.turn(1)
+            mv.forward(speed)
+        time.sleep(0.1)

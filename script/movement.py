@@ -24,7 +24,7 @@ class MotorStallException(Exception):
 # This function can either take a position (cm) for the robot to travel and/or
 # a speed (cm/s) for it to travel at. Default speed is 15 cm/s
 def forward(speed = BASE_SPEED, position = False, dir_change = -1):
-    speed = speed * dir_change
+    speed = (-1) * speed * dir_change
     # Error checking for inputted values for position
     if position:
         if type(position) is not int or type(position) is not float:
@@ -55,7 +55,7 @@ def forward(speed = BASE_SPEED, position = False, dir_change = -1):
         allStop()
         BP.reset_all()
   
-def turn(dir, speed = BASE_SPEED): # defining dir=direction 0 to be straight, -1 as right and +1 as left
+def turn(dir, speed=BASE_SPEED, precise=False): # defining dir=direction 0 to be straight, -1 as right and +1 as left
     # BP.set_motor_limits(T_MOTOR_PORT, 0, 60)
     global turn_state
     dir, turn_state = dir - turn_state, dir
@@ -64,21 +64,22 @@ def turn(dir, speed = BASE_SPEED): # defining dir=direction 0 to be straight, -1
     T_target = T_current + dir * SmallLegoMotor.full_turn_from_zero
     BP.set_motor_position(T_MOTOR_PORT, T_target)
     
-    error = 5
-    if dir > 0:
-        while BP.get_motor_encoder(T_MOTOR_PORT) < T_target - error: # wait until the turn is complete to within 5 degrees
-            print(f"Turn motor is at {BP.get_motor_encoder(T_MOTOR_PORT)}, target is {T_target}")
-            BP.set_motor_power(L_MOTOR_PORT, speed * LargeLegoMotor.power_to_speed * 0.5)
-            BP.set_motor_power(R_MOTOR_PORT, speed * LargeLegoMotor.power_to_speed)
-            error += 0.2
-            time.sleep(0.1)
-    else:
-        while BP.get_motor_encoder(T_MOTOR_PORT) > T_target + error:
-            BP.set_motor_power(R_MOTOR_PORT, speed * LargeLegoMotor.power_to_speed * 0.5)
-            BP.set_motor_power(L_MOTOR_PORT, speed * LargeLegoMotor.power_to_speed)
-            print(f"Turn motor is at {BP.get_motor_encoder(T_MOTOR_PORT)}, target is {T_target}")
-            error += 0.2    
-            time.sleep(0.1)
+    if precise:
+        error = 5
+        if dir > 0:
+            while BP.get_motor_encoder(T_MOTOR_PORT) < T_target - error: # wait until the turn is complete to within 5 degrees
+                print(f"Turn motor is at {BP.get_motor_encoder(T_MOTOR_PORT)}, target is {T_target}")
+                BP.set_motor_power(L_MOTOR_PORT, speed * LargeLegoMotor.power_to_speed * 0.5)
+                BP.set_motor_power(R_MOTOR_PORT, speed * LargeLegoMotor.power_to_speed)
+                error += 0.2
+                time.sleep(0.1)
+        else:
+            while BP.get_motor_encoder(T_MOTOR_PORT) > T_target + error:
+                BP.set_motor_power(R_MOTOR_PORT, speed * LargeLegoMotor.power_to_speed * 0.5)
+                BP.set_motor_power(L_MOTOR_PORT, speed * LargeLegoMotor.power_to_speed)
+                print(f"Turn motor is at {BP.get_motor_encoder(T_MOTOR_PORT)}, target is {T_target}")
+                error += 0.2    
+                time.sleep(0.1)
         
     
 
