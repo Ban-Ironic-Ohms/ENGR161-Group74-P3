@@ -2,8 +2,8 @@ from script.MPU9250 import MPU9250
 import sys
 import time
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+# import matplotlib.pyplot as plt
+# from matplotlib.animation import FuncAnimation
 
 # This sample code reads the data from the acceleration, gyro, and magnetic
 # sensors, breaks each into their components, and prints one of the results
@@ -48,49 +48,49 @@ def readPrint(accelPrint = True, gyroPrint = True, magPrint = True):
     except KeyboardInterrupt:
         sys.exit()
 
-def readGraph(accelGraph = True, gyroGraph = True, magGraph = True):
-    try:
-        start_time = time.time()
-        time_data = [i for i in range(200)]
+# def readGraph(accelGraph = True, gyroGraph = True, magGraph = True):
+#     try:
+#         start_time = time.time()
+#         time_data = [i for i in range(200)]
         
-        data = {}
+#         data = {}
         
-        if accelGraph:
-            data["accel"] = [0 for i in range(200)]
-        if gyroGraph:
-            data["gyro"] = [0 for i in range(200)]
-        if magGraph:
-            data["mag"] = [0 for i in range(200)]
+#         if accelGraph:
+#             data["accel"] = [0 for i in range(200)]
+#         if gyroGraph:
+#             data["gyro"] = [0 for i in range(200)]
+#         if magGraph:
+#             data["mag"] = [0 for i in range(200)]
         
-        xlen = 200
-        yrange = [-1, 1]
+#         xlen = 200
+#         yrange = [-1, 1]
         
-        fig, ax = plt.subplots(len(data) + 1, 1)
-        for i in range(len(data)):
-            # ax[i][0].set_title(data[i])
-            # ax[1][0].xlabel("Time")
-            # ax[1][0].ylabel("Value")
-            # ax[i][0].set_ylim(yrange)
-            plt.subplot(1, i+1, i+1)
-            plt.plot(time_data, [0 for i in range(200)])
+#         fig, ax = plt.subplots(len(data) + 1, 1)
+#         for i in range(len(data)):
+#             # ax[i][0].set_title(data[i])
+#             # ax[1][0].xlabel("Time")
+#             # ax[1][0].ylabel("Value")
+#             # ax[i][0].set_ylim(yrange)
+#             plt.subplot(1, i+1, i+1)
+#             plt.plot(time_data, [0 for i in range(200)])
 
-        def update(i, time_data):
-            data["accel"].append(mpu9250.readAccel())
-            data["accel"] = data["accel"][-xlen:]
-            data["gyro"].append(mpu9250.readGyro())
-            data["gyro"] = data["gyro"][-xlen:]
-            data["mag"].append(mpu9250.readMagnet())
-            data["mag"] = data["mag"][-xlen:]
+#         def update(i, time_data):
+#             data["accel"].append(mpu9250.readAccel())
+#             data["accel"] = data["accel"][-xlen:]
+#             data["gyro"].append(mpu9250.readGyro())
+#             data["gyro"] = data["gyro"][-xlen:]
+#             data["mag"].append(mpu9250.readMagnet())
+#             data["mag"] = data["mag"][-xlen:]
             
-            time_data.append(time.time() - start_time)
-            time_data = time_data[-xlen:]
+#             time_data.append(time.time() - start_time)
+#             time_data = time_data[-xlen:]
 
-            for i in range(len(data)):
-                plt.subplot(1, i+1, i+1)
-                plt.plot(time_data, data[data[i]])
+#             for i in range(len(data)):
+#                 plt.subplot(1, i+1, i+1)
+#                 plt.plot(time_data, data[data[i]])
         
-        ani = FuncAnimation(fig, update, fargs=(time_data,), interval=50, blit=True)
-        plt.show()
+#         ani = FuncAnimation(fig, update, fargs=(time_data,), interval=50, blit=True)
+#         plt.show()
         
-    except KeyboardInterrupt:
-        sys.exit()
+#     except KeyboardInterrupt:
+#         sys.exit()

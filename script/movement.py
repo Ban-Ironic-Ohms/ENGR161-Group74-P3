@@ -16,6 +16,7 @@ BP = brickpi3.BrickPi3()
 L_MOTOR_PORT = BP.PORT_B
 R_MOTOR_PORT = BP.PORT_C
 
+
 T_MOTOR_PORT = BP.PORT_A
 
 all_motors = [L_MOTOR_PORT, R_MOTOR_PORT, T_MOTOR_PORT]
@@ -63,6 +64,7 @@ def forward(speed = BASE_SPEED, position = False, dir_change = 1):
 
     # exceptions call allStop so motors stop
     except KeyboardInterrupt:
+        print("this one is getting called in forward")
         allStop()
         BP.reset_all()
     except MotorStallException:
@@ -104,12 +106,21 @@ def turn(dir, speed=BASE_SPEED, precise=False): # defining dir=direction 0 to be
                 print(f"Turn motor is at {BP.get_motor_encoder(T_MOTOR_PORT)}, target is {T_target}")
                 error += 0.2    
                 time.sleep(0.1)
-        
+      
+def lf(speed):
+    BP.set_motor_power(L_MOTOR_PORT, speed * LargeLegoMotor.power_to_speed)
+
+def rf(speed):
+    BP.set_motor_power(R_MOTOR_PORT, speed * LargeLegoMotor.power_to_speed)
+
 
 def allStop():
     print("Stopping")    
     for port in all_motors:
+        print("setting power 0")
         BP.set_motor_power(port, 0)
+    
     BP.reset_all()
+    return True
     
     
