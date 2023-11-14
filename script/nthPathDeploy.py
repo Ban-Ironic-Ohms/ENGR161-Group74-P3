@@ -9,7 +9,7 @@ mpu9250 = MPU9250()
 
 def nthDeploy(ntar, speed, n=0):
 
-    while abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) < 150:
+    while abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) < 250:
         print(mpu9250.readMagnet())
         print(abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']))
         mv.lf(speed)
@@ -30,7 +30,7 @@ def nthDeploy(ntar, speed, n=0):
         # exit()
         
     else:
-        while abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) > 150:
+        while abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) > 250:
             print("waiting")
             mv.lf(speed)
             mv.rf(speed)

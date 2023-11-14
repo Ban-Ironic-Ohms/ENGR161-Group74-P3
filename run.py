@@ -15,18 +15,19 @@ import script.chooseLeftRight as clr
 try:
     while True:
         # CARGO DROP
-        # ndep.nthDeploy(2, 15)
+        # ndep.nthDeploy(1, 70)
+        
+        # IF NEEDED
+        cargo.deploy()
+        
         # raise Exception(KeyboardInterrupt)
         
-        # 
-        # mv.rf(0)
-        # mv.lf(15)
-        # time.sleep(8)
+
         
-        # 
         
         # choose LEFT OR RIGHT (0 is staight 1 is left)
-        clr.choosePath(1, 15)
+        # clr.choosePath(1, 40)
+        
         
         
 

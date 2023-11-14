@@ -12,12 +12,12 @@ mpu9250 = MPU9250()
 
 
 def choosePath(dir, speed):
-    while abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) < 150:
-        mv.lf(speed)
-        mv.rf(speed)
-        time.sleep(0.05)
+    # while abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) < 150:
+    #     mv.lf(speed)
+    #     mv.rf(speed)
+    #     time.sleep(0.05)
     
-    time.sleep(3)
+    time.sleep(9)
     
     if dir == 0:
         
