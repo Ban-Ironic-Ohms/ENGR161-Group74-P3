@@ -2,10 +2,12 @@ import script.movement as mv
 import time
 import script.lineFollow as lineFollow
 import script.cargo as cargo
-import script.lineFollowMono as lf
-from script.IMU import readPrint
-import script.nthPathDeploy as ndep
-import script.chooseLeftRight as clr
+# import POC2.lineFollowMono as lf
+# from script.IMU import readPrint
+# import POC2.nthPathDeploy as ndep
+# import POC2.chooseLeftRight as clr
+
+import script.navigation
 
 # import script.IMU as IMU 
 
@@ -13,23 +15,7 @@ import script.chooseLeftRight as clr
 # IMU.readGraph()
 # IMU.readPrint()
 try:
-    while True:
-        # CARGO DROP
-        # ndep.nthDeploy(1, 70)
-        
-        # IF NEEDED
-        cargo.deploy()
-        
-        # raise Exception(KeyboardInterrupt)
-        
-
-        
-        
-        # choose LEFT OR RIGHT (0 is staight 1 is left)
-        # clr.choosePath(1, 40)
-        
-        
-        
+    pass
 
         
 except KeyboardInterrupt:
