@@ -45,6 +45,8 @@ def forward(speed = BASE_SPEED, dir_change = 1):
     lf(speed)
     rf(speed)
 
+def fw(speed = BASE_SPEED, dir_change = 1):
+    forward(speed, dir_change)
   
 def turn(dir, speed=BASE_SPEED): # defining dir=direction 0 to be straight, +1 as right and -1 as left
     # keeps a state for current turn direction so we can work relativly across multiple function calls

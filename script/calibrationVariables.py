@@ -2,7 +2,7 @@ class LargeLegoMotor:
     power_to_speed = 1.27 # takes power in the given units and gives speed in cm/s
     delta_encoder_to_position = 10 # takes change in encoder position and gives a change in position in cm
     time_to_angle = 10
-    base_seped = 15
+    base_speed = 30
     
 class SmallLegoMotor:
     full_turn_from_zero = 20 # gives a change in encoder value that turns the wheels fully one way or another 

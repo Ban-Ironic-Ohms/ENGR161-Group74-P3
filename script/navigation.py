@@ -5,16 +5,16 @@
 
 # ------------------- Section 1: Sensors ----------------------------
 
-# from MPU9250 import MPU9250
+from script.MPU9250 import MPU9250
 from script.calibrationVariables import *
 import grovepi
 import time
 import script.movement as mv
 # import movement as mv
-# mpu9250 = MPU9250()
+mpu9250 = MPU9250()
 
-L_LIGHT_SENSOR = 0
-R_LIGHT_SENSOR = 1
+L_LIGHT_SENSOR = 2
+R_LIGHT_SENSOR = 0
 
 LIGHT_SENSOR_RATIO = float(input("How far between the black and white point will we sense the line: "))
 
@@ -28,7 +28,7 @@ def queryAccel(absolute=False):
 def queryGyro():
     return mpu9250.readGyro()
 
-def queryMag(absolute=False):
+def queryMag(absolute=True):
     if absolute:
         return abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z']) + abs(mpu9250.readMagnet()['z'])
     else:
@@ -110,7 +110,7 @@ def calibrate(IMU, LightSensor, *kwargs):
             
             
         print("Enter the value that corresponds to a detected magnet, or press RETURN to see a new reading")
-        # IMU = IMU(getMagTh())
+        IMU = IMU(getMagTh())
         
         print("Enter the value that corresponds to a WHITE paper on the LEFT sensor, or press RETURN to see a new reading")
         lwhite = getWhitePoint()
@@ -132,17 +132,21 @@ def calibrate(IMU, LightSensor, *kwargs):
 def reaquire(deviationDirection, calValues):
     mv.allStop()
     if deviationDirection == 1: # deviating right, need to start with reaquire left
-        mv.lf(-LargeLegoMotor.base_seped)
-        mv.rf(LargeLegoMotor.base_seped)
-        time.sleep(1)
+        mv.lf(-0.5 * LargeLegoMotor.base_speed)
+        mv.rf(LargeLegoMotor.base_speed)
+        time.sleep(0.3)
+        mv.fw(LargeLegoMotor.base_speed)
+        time.sleep(0.3)
         
     if deviationDirection == -1:
-        mv.lf(LargeLegoMotor.base_seped)
-        mv.rf(-LargeLegoMotor.base_seped)
-        time.sleep(1)
+        mv.lf(LargeLegoMotor.base_speed)
+        mv.rf(-0.5 * LargeLegoMotor.base_speed)
+        time.sleep(0.3)
+        mv.fw(LargeLegoMotor.base_speed)
+        time.sleep(0.3)
         
     if deviationDirection == False:
-        # AAAh what to do??
+        print("BOTH SENSORS DETECT A BLACK LINE")
         pass
 
     deviationDirection = onLine(calValues)
@@ -154,8 +158,8 @@ def reaquire(deviationDirection, calValues):
 def followLine(LightSensor, timestep):
     deviationDirection = onLine(LightSensor)
     if deviationDirection == 0:
-        mv.lf(LargeLegoMotor.base_seped)
-        mv.rf(LargeLegoMotor.base_seped)
+        mv.lf(LargeLegoMotor.base_speed)
+        mv.rf(LargeLegoMotor.base_speed)
     else:
         print("Reaquiring...")
         reaquire(deviationDirection, LightSensor)
@@ -164,6 +168,6 @@ def followLine(LightSensor, timestep):
     followLine(LightSensor, timestep)
 
 # how this will work
-LightSensor = calibrate(IMU, LightSensor)[0]
-print(LightSensor)
-followLine(LightSensor, 0.5)
+# LightSensor = calibrate(IMU, LightSensor)[0]
+# print(LightSensor)
+# followLine(LightSensor, 0.5)
