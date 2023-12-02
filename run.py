@@ -21,25 +21,27 @@ import script.navigation as nav
 
 try:
     
-    mv.fw(20)
-    cargo.magDeploy(400)
-    
+    # mv.fw(50)
+
+    # cargo.magDeploy(200, -1, 20)
+    # cargo.deploy(-1, 20)
+    #
     # RUN THE NAV FILE
-    # LightSensor = nav.calibrate(IMU, LightSensor)[0]
-    # nav.followLine(LightSensor, 0.5)
+    cal = nav.calibrate(IMU, LightSensor, UltrasonicSensor)
+    IMU = cal[0]
+    LightSensor = cal[1]
+    UltrasonicSensor = cal[2]
     
-    # mv.fw(30)
-    # cargo.hold()
-    # cargo.deploy(-1, 10)
-    # time.sleep(5)
-    # mv.allStop()
+    nav.navigateCourse(LightSensor, UltrasonicSensor, IMU, 0.5, 20, 2, 0)
+    
+    # time.sleep(2)
     # mv.lf(30)
     # mv.rf(10)
     # time.sleep(6)
     # mv.fw(30)
     # time.sleep(3)
-    # mv.allStop()
     time.sleep(10)
+    mv.allStop()
 
         
 except KeyboardInterrupt:

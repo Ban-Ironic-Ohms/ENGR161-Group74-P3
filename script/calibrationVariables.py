@@ -10,7 +10,7 @@ class SmallLegoMotor:
 
 class IMU:
     def __init__(self, magThreshold) -> None:
-        self.magnetThreshold = magThreshold
+        self.magThreshold = magThreshold
 
 class LightSensor:
     def __init__(self, leftWhitePoint, rightWhitePoint, leftBlackPoint, rightBlackPoint) -> None:
@@ -22,3 +22,10 @@ class LightSensor:
         
     def __str__(self) -> str:
         return f"lwhite: {self.leftWhitePoint} rwhite: {self.rightWhitePoint}\nlblack: {self.leftBlackPoint} rblack:{self.rightBlackPoint}"
+
+class UltrasonicSensor:
+    def __init__(self, hillDist):
+        self.hillDist = hillDist
+    
+    def __str__(self) -> str:
+        return f"US reading @ 10cm to hill: {self.hillDist}"
