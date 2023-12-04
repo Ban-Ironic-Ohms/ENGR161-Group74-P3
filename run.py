@@ -12,7 +12,6 @@ from script.calibrationVariables import *
 # import POC2.chooseLeftRight as clr
 
 import script.navigation as nav
-
 # import script.IMU as IMU 
 
 # lineFollow.followSolid()
@@ -20,19 +19,20 @@ import script.navigation as nav
 # IMU.readPrint()
 
 try:
-    
-    # mv.fw(50)
-
+    # speed = int(input("what speed to test: "))
+    # nav.speedTest(speed)
+    # mv.fw(speed)
+    # cargo.hold()
     # cargo.magDeploy(200, -1, 20)
     # cargo.deploy(-1, 20)
-    #
+    
     # RUN THE NAV FILE
     cal = nav.calibrate(IMU, LightSensor, UltrasonicSensor)
     IMU = cal[0]
     LightSensor = cal[1]
     UltrasonicSensor = cal[2]
-    
-    nav.navigateCourse(LightSensor, UltrasonicSensor, IMU, 0.5, 20, 2, 0)
+    timestep = float(input("timestep: "))
+    nav.navigateCourse(LightSensor, UltrasonicSensor, IMU, timestep, 40, 0, 0)
     
     # time.sleep(2)
     # mv.lf(30)
@@ -40,7 +40,7 @@ try:
     # time.sleep(6)
     # mv.fw(30)
     # time.sleep(3)
-    time.sleep(10)
+    time.sleep(30)
     mv.allStop()
 
         

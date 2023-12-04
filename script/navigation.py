@@ -21,7 +21,9 @@ R_LIGHT_SENSOR = 0
 
 # higher makes it eaisier to sense a black like
 # lower makes it eaiser to sense a white color
-LIGHT_SENSOR_RATIO = float(input("How far between the black and white point will we sense the line: "))
+# LIGHT_SENSOR_RATIO = float(input("How far between the black and white point will we sense the line: "))
+CHANGE_THR = int(input("Change threshold: "))
+SITE = int(input("Which site to drop cargo at? (A: 1, B: 2, C: 3) - "))
 
 BP = brickpi3.BrickPi3()
 BP.set_sensor_type(BP.PORT_1, BP.SENSOR_TYPE.EV3_ULTRASONIC_CM)
@@ -34,12 +36,14 @@ def queryAccel(absolute=False):
         return mpu9250.readAccel()
     
 def queryGyro():
-    return mpu9250.readGyro()
+    return mpu9250.readGyro()['x']
 
 def queryMag(absolute=True):
     if absolute:
         a = mpu9250.readMagnet()
-        return a['x']         
+        print(a)
+        # print(abs(a['x']) + a['z'])
+        return abs(a['z'])         
         # return abs(a['x']) + abs(a['y']) + abs(a['z'])
     else:
         return mpu9250.readMagnet()
@@ -74,7 +78,7 @@ def onLine(calValues, prev_data = None):
     r_sensor_value = grovepi.analogRead(R_LIGHT_SENSOR)
     print(f"Left: {l_sensor_value} Right: {r_sensor_value}")
     
-    change_threshold = 10
+    change_threshold = CHANGE_THR
     
     l_on_line = False
     r_on_line = False
@@ -82,61 +86,42 @@ def onLine(calValues, prev_data = None):
     prev_data_l = prev_data[0]
     prev_data_r = prev_data[1]
     print(prev_data)
-    if prev_data_l:
-        delta_data = [prev_data_l[i] - prev_data_r[i] for i in range(len(prev_data_l))]
-        running_av = statistics.mean(delta_data)    # gives the average difference between sensor values (can be + or -)
-        delta = l_sensor_value - r_sensor_value     # positive when l_sensor is on white, r_sensor is black
-        
-        print(f"checking if bot is on line. past 5 delta data {delta_data} w/ av of {running_av}\current delta {delta}")
-        
-        if delta - running_av > change_threshold:   # triggers when R on black, therefore need to turn right
-            print("large delta on right sensor, robot will now turn right")
-            # print(f"CURRNETLY L LIST: {prev_data_l}")
-            
-            prev_data_l = prev_data_l[1:]
-            # prev_data_r = prev_data_r[1:]
-            
-            prev_data_l.append(l_sensor_value)
-            # prev_data_r.append(r_sensor_value)
-            
-            # print(f"NEW L LIST: {prev_data_l}")
-            return (-1, (prev_data_l, prev_data_r))
-        elif delta - running_av < -change_threshold:  # triggers when L on black, therefore turn left
-            print("large delta on left sensor, robot will now turn left")
-            # print(f"CURRNETLY R LIST: {prev_data_r}")
-            
-            # prev_data_l = prev_data_l[1:]
-            prev_data_r = prev_data_r[1:]
-            
-            # prev_data_l.append(l_sensor_value)
-            prev_data_r.append(r_sensor_value)
-            
-            # print(f"NEW R LIST: {prev_data_r}")
-            return (1, (prev_data_l, prev_data_r))
-        else:
-            prev_data_l = prev_data_l[1:].append(l_sensor_value)
-            prev_data_r = prev_data_r[1:].append(r_sensor_value)
-            return (0, prev_data)
-            
-        
+
+    delta_data = [prev_data_l[i] - prev_data_r[i] for i in range(len(prev_data_l))]
+    running_av = statistics.mean(delta_data)    # gives the average difference between sensor values (can be + or -)
+    delta = l_sensor_value - r_sensor_value     # positive when l_sensor is on white, r_sensor is black
     
-    # if not prev_data_l:
-    #     if l_sensor_value - calValues.leftBlackPoint > LIGHT_SENSOR_RATIO * (calValues.leftWhitePoint - calValues.leftBlackPoint):
-    #         l_on_line = True
-    #     if r_sensor_value - calValues.rightBlackPoint > LIGHT_SENSOR_RATIO * (calValues.rightWhitePoint - calValues.rightBlackPoint):   
-    #         r_on_line = True
+    print(f"checking if bot is on line. past 5 delta data {delta_data} w/ av of {running_av}\current delta {delta}")
+    
+    if delta - running_av > change_threshold:   # triggers when R on black, therefore need to turn right
+        print("large delta on right sensor, robot will now turn right")
+        # print(f"CURRNETLY L LIST: {prev_data_l}")
         
-    #     if l_on_line and r_on_line:
-    #         print("On Line!")
-    #         return 0
-    #     if not l_on_line: # left sensor sees line, deviating to the right
-    #         print("Deviating right")
-    #         return 1
-    #     if not r_on_line: # right sensor sees line, deviating left
-    #         print("Deviating left")
-    #         return -1
-    #     else:
-    #         return False
+        prev_data_l = prev_data_l[1:]
+        # prev_data_r = prev_data_r[1:]
+        
+        prev_data_l.append(l_sensor_value)
+        # prev_data_r.append(r_sensor_value)
+        
+        # print(f"NEW L LIST: {prev_data_l}")
+        return (-1, (prev_data_l, prev_data_r))
+    elif delta - running_av < -change_threshold:  # triggers when L on black, therefore turn left
+        print("large delta on left sensor, robot will now turn left")
+        # print(f"CURRNETLY R LIST: {prev_data_r}")
+        
+        # prev_data_l = prev_data_l[1:]
+        prev_data_r = prev_data_r[1:]
+        
+        # prev_data_l.append(l_sensor_value)
+        prev_data_r.append(r_sensor_value)
+        
+        # print(f"NEW R LIST: {prev_data_r}")
+        return (1, (prev_data_l, prev_data_r))
+    else:
+        prev_data_l = prev_data_l[1:].append(l_sensor_value)
+        prev_data_r = prev_data_r[1:].append(r_sensor_value)
+        return (0, prev_data)
+            
 
 # many sensors need calibration!
 def calibrate(IMU, LightSensor, UltrasonicSensor, *kwargs):
@@ -176,8 +161,8 @@ def calibrate(IMU, LightSensor, UltrasonicSensor, *kwargs):
                 return float(value)
             
         print("Enter the value that corresponds to a detected magnet, or press RETURN to see a new reading")
-        # IMU = IMU(getMagTh())
-        IMU = IMU(1)
+        IMU = IMU(getMagTh())
+        # IMU = IMU(1)
         
         print("Enter the value that corresponds to a WHITE paper on the LEFT sensor, or press RETURN to see a new reading")
         # lwhite = getWhitePoint()
@@ -195,17 +180,17 @@ def calibrate(IMU, LightSensor, UltrasonicSensor, *kwargs):
         # rblack = getBlackPoint()
         rblack = 1
         
-        print("Place the MACRO ~10cm from the base of the hill, then enter the reading from the utrasonic sensor")
-        # UltrasonicSensor = UltrasonicSensor(getUltrasolic())
-        UltrasonicSensor = UltrasonicSensor(1)
+        print("Place the MACRO ~3cm from an obstacle, then enter the reading from the utrasonic sensor")
+        UltrasonicSensor = UltrasonicSensor(getUltrasolic())
+        # UltrasonicSensor = UltrasonicSensor(-1)
                 
         LightSensor = LightSensor(lwhite, rwhite, lblack, rblack)
         
         return [IMU, LightSensor, UltrasonicSensor]
         # return [LightSensor]
 
-def reaquire(deviationDirection, calValues, prev_data):
-    mv.allStop()
+def reaquire(deviationDirection, calValues, prev_data, timestep):
+    # mv.allStop()
     # print(f"called reaquire with prev data {prev_data}")
     if deviationDirection == 1: # deviating right, need to start with reaquire left
         mv.lf(-0.5 * LargeLegoMotor.base_speed)
@@ -230,7 +215,8 @@ def reaquire(deviationDirection, calValues, prev_data):
     prev_data = q[1]
     
     if deviationDirection != 0:
-        return reaquire(deviationDirection, calValues, prev_data)
+        time.sleep(timestep/2)
+        return reaquire(deviationDirection, calValues, prev_data, timestep)
     
     return prev_data
 
@@ -241,17 +227,18 @@ def followLine(LightSensor, timestep):
         mv.rf(LargeLegoMotor.base_speed)
     else:
         print("Reaquiring...")
-        reaquire(deviationDirection, LightSensor)
+        reaquire(deviationDirection, LightSensor, None, timestep)
      
     time.sleep(timestep)
     followLine(LightSensor, timestep)
     
-def initializeDelta():
+def initializeDelta(timestep):
     print("getting some baseline data")
     prev_data_l = []
     prev_data_r = []
+    
     i = 0
-    while i <= 4:
+    while i <= int((1 / timestep) / 2):
         l_sensor_value = grovepi.analogRead(L_LIGHT_SENSOR)
         r_sensor_value = grovepi.analogRead(R_LIGHT_SENSOR)
         prev_data_l.append(l_sensor_value)
@@ -259,33 +246,115 @@ def initializeDelta():
         i += 1
     print((prev_data_r, prev_data_r))
     return (prev_data_l, prev_data_r)
+
+def obstacleTraverse(speed):
+    start = time.time()
+    print("RUNNING TRAVERSE" * 1000)
+    while time.time() - start < 4:
+        # increase speed linearly from current speed to 1.8x speed over 4 sec
+        mv.fw(speed * (1 + (0.8 * (time.time() - start)) / 3))
+        # with .15 sec intervals to jerk the robot
+        time.sleep(0.15)
+    # reset motors to base speed
+    mv.fw(speed)
+    return
+
+def USObstacle(UltrasonicSensor):
+    dist = queryUltrasonic()
+    if dist < UltrasonicSensor.hillDist:
+        return True
+    return False
+        
+def navigateCourse(LightSensor, UltrasonicSensor, IMU, timestep, speed, mag_count, hill_count, in_magnet = False, in_hill = False, prev_data = None):
+    # speed = int((2.2 * speed) + 3.78)
     
-def navigateCourse(LightSensor, UltrasonicSensor, IMU, timestep, speed, mag_count, hill_count, prev_data = None):
     if not prev_data:
-        prev_data = initializeDelta()
+        prev_data = initializeDelta(timestep)
+        
+        
     # print(f"calling online with prevdata {prev_data}")
     q = onLine(LightSensor, prev_data)
     deviationDirection = q[0]
     # print(f"deviation direction: {deviationDirection}")
     if deviationDirection == 0:
-        # US_val = queryUltrasonic()
-        # if hill_count < 1:
-        #     if US_val < UltrasonicSensor.hillDist: # only goes on first hill
-        #         print(f"saw a hill! Hill count going from {hill_count} to {hill_count + 1}")
-        #         hill_count += 1
-        #         speed *= 1.2            # NOTE: this can be changed to better climb the hill
+        # checking for obstacle in front of MACRO
+        while USObstacle():
+            time.sleep(0.5)
         
-        # if hill_count == 1:
-        #     if US_val > UltrasonicSensor.hillDist:
-        #         print("and we are over the hill!")
-        #         hill_count += 1
-        #         speed *= (1)/(1.2)      # NOTE: change it here as well
         
-        # MAG_val = queryMag()
-        # if MAG_val > IMU.magThreshold:
-        #     print("hit a magnet")
-        #     mag_count += 1
+        # check if we are going over a hill/obsticale
+        angle_val = queryGyro()
+        print(angle_val)
+        if angle_val > 10:
+            print(f"SAW A HILL!!! #{hill_count + 1}" * 100)
+            if not in_hill:
+                if hill_count == 3:
+                    print("going up hill")
+                    obstacleTraverse(speed)
+                    hill_count += 1
+                    in_hill = True
+                else:
+                    hill_count += 1
+                    print("already not the real hill, anomoly angle change detected")
+            else:
+                print("IN A HILL CURRENTLY")
+        else:
+            in_hill = False
         
+        MAG_val = queryMag()
+        
+        # a: 1, b: 2, c: 3
+        # SITE
+        print(f"checking for a mag! mag_value {MAG_val} vs threshold {IMU.magThreshold}. In a magnet: {in_magnet}. mag num {mag_count}")
+        if MAG_val > IMU.magThreshold:
+            if in_magnet:
+                print("still in the same magnet")
+            else:
+                print("hit a new magnet")
+                in_magnet = True
+                mag_count += 1
+                # LOGIC based on site
+                if SITE == 1:
+                    if mag_count == 1:
+                        mv.lf(speed)
+                        mv.rf(0)
+                        time.sleep(2)
+                        mv.fw(speed)
+                        time.sleep(3.5)
+                        cargo.sleepFwDeploy(4)
+                        
+                    # if mag_count == 2:
+                elif SITE == 2:
+                    if mag_count == 1:
+                        mv.fw(speed * .75)
+                        time.sleep(2)
+                    if mag_count == 2:
+                        mv.lf(speed)
+                        mv.rf(0)
+                        time.sleep(2)
+                        mv.fw(speed)
+                        time.sleep(3.5)
+                        cargo.sleepFwDeploy(4)
+                    # if mag_count == 3:
+                elif SITE == 3:
+                    if mag_count == 1:
+                        mv.fw(speed * .75)
+                        time.sleep(2)
+                    if mag_count == 2:
+                        mv.fw(speed * .75)
+                        time.sleep(2)
+                        mv.lf(speed)
+                        mv.rf(0)
+                        time.sleep(2)
+                        mv.fw(speed)
+                        time.sleep(3.5)
+                        cargo.sleepFwDeploy(4)
+                    # if mag_count == 3:
+        else:
+            in_magnet = False
+        
+
+
         # if mag_count == 3:              # NOTE: change the 3 to however many magnet we see
         #     print("deploying because we saw the nth magnet")
         #     cargo.sleepFwDeploy(4)
@@ -307,15 +376,25 @@ def navigateCourse(LightSensor, UltrasonicSensor, IMU, timestep, speed, mag_coun
     else:
         print("Reaquiring...")
         # print(f"calling reaquire prev data {prev_data}")
-        prev_data = reaquire(deviationDirection, LightSensor, prev_data)
+        prev_data = reaquire(deviationDirection, LightSensor, prev_data, timestep)
         
         # print(f"finished reaquire: prev data is {prev_data}")
      
     time.sleep(timestep)
-    navigateCourse(LightSensor, UltrasonicSensor, IMU, timestep, speed, mag_count, hill_count, prev_data)
+    navigateCourse(LightSensor, UltrasonicSensor, IMU, timestep, speed, mag_count, hill_count, in_magnet, in_hill, prev_data)
 
 
-
+def speedTest(maxSpeed):
+    # takes in speed in cm/s
+    
+    power = (2.2 * maxSpeed) + 3.78
+    start = time.time()
+    mv.lf(power)
+    mv.rf(power * 0.93)
+    # mv.fw(power)
+    while (time.time() - start) * maxSpeed:
+        pass
+    
 
 # LightSensor = calibrate(IMU, LightSensor, UltrasonicSensor)[0]
 # print(LightSensor)

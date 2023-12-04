@@ -15,7 +15,7 @@ RETAINER_MOTOR_PORT = BP.PORT_D
 def queryMag(absolute=True):
     if absolute:
         a = mpu9250.readMagnet()
-        return a['x']
+        return a['z']
     else:
         return mpu9250.readMagnet()
 
