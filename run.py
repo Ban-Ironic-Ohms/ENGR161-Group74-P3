@@ -19,20 +19,20 @@ import script.navigation as nav
 # IMU.readPrint()
 
 try:
-    # speed = int(input("what speed to test: "))
-    # nav.speedTest(speed)
+    speed = int(input("what speed to test: "))
+    nav.speedTest(speed)
     # mv.fw(speed)
     # cargo.hold()
     # cargo.magDeploy(200, -1, 20)
     # cargo.deploy(-1, 20)
     
     # RUN THE NAV FILE
-    cal = nav.calibrate(IMU, LightSensor, UltrasonicSensor)
-    IMU = cal[0]
-    LightSensor = cal[1]
-    UltrasonicSensor = cal[2]
-    timestep = float(input("timestep: "))
-    nav.navigateCourse(LightSensor, UltrasonicSensor, IMU, timestep, 40, 0, 0)
+    # cal = nav.calibrate(IMU, LightSensor, UltrasonicSensor)
+    # IMU = cal[0]
+    # LightSensor = cal[1]
+    # UltrasonicSensor = cal[2]
+    # timestep = float(input("timestep: "))
+    # nav.navigateCourse(LightSensor, UltrasonicSensor, IMU, timestep, 40, 0, 0)
     
     # time.sleep(2)
     # mv.lf(30)

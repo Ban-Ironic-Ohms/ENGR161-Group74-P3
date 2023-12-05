@@ -45,7 +45,7 @@ def magDeploy(threshold, dir_change = -1, speed = 15):
     time.sleep(4)
     deploy(dir_change, speed)
 
-def sleepFwDeploy(sleep, dir_change = -1, speed = 15):
+def sleepFwDeploy(sleep, dir_change = -1, speed = 23):
     print("deploying after a sleep and while moving fwrd")
     mv.allStop()
     mv.fw(20)

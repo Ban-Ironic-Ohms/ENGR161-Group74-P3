@@ -24,6 +24,7 @@ R_LIGHT_SENSOR = 0
 # LIGHT_SENSOR_RATIO = float(input("How far between the black and white point will we sense the line: "))
 CHANGE_THR = int(input("Change threshold: "))
 SITE = int(input("Which site to drop cargo at? (A: 1, B: 2, C: 3) - "))
+# RUN_ULTRASONIC = 
 
 BP = brickpi3.BrickPi3()
 BP.set_sensor_type(BP.PORT_1, BP.SENSOR_TYPE.EV3_ULTRASONIC_CM)
@@ -52,9 +53,11 @@ def queryUltrasonic():
     try:
         value = BP.get_sensor(BP.PORT_1)
         return float(value)
-    except brickpi3.SensorError as error:
+    except Exception as error:
         print(error)
-        return
+        BP.set_sensor_type(BP.PORT_1, BP.SENSOR_TYPE.EV3_ULTRASONIC_CM)
+        time.sleep(4)
+        return 20
 
 def queryLightSensors(both=True): 
     if both:
@@ -181,26 +184,31 @@ def calibrate(IMU, LightSensor, UltrasonicSensor, *kwargs):
         rblack = 1
         
         print("Place the MACRO ~3cm from an obstacle, then enter the reading from the utrasonic sensor")
-        UltrasonicSensor = UltrasonicSensor(getUltrasolic())
-        # UltrasonicSensor = UltrasonicSensor(-1)
+        # UltrasonicSensor = Ultraso
+        # nicSensor(getUltrasolic())
+        UltrasonicSensor = UltrasonicSensor(-1)
                 
         LightSensor = LightSensor(lwhite, rwhite, lblack, rblack)
         
         return [IMU, LightSensor, UltrasonicSensor]
         # return [LightSensor]
 
-def reaquire(deviationDirection, calValues, prev_data, timestep):
+def reaquire(deviationDirection, calValues, prev_data, timestep, UltrasonicSensor):
     # mv.allStop()
     # print(f"called reaquire with prev data {prev_data}")
+    while USObstacle(UltrasonicSensor):
+        mv.allStop()
+        time.sleep(0.5)
+    
     if deviationDirection == 1: # deviating right, need to start with reaquire left
         mv.lf(-0.5 * LargeLegoMotor.base_speed)
-        mv.rf(LargeLegoMotor.base_speed)
+        mv.rf(1.1 * LargeLegoMotor.base_speed)
         time.sleep(0.05)
         # mv.fw(LargeLegoMotor.base_speed)
         # time.sleep(0.1)
         
     if deviationDirection == -1:
-        mv.lf(LargeLegoMotor.base_speed)
+        mv.lf(1.1 * LargeLegoMotor.base_speed)
         mv.rf(-0.5 * LargeLegoMotor.base_speed)
         time.sleep(0.05)
         # mv.fw(LargeLegoMotor.base_speed)
@@ -215,8 +223,8 @@ def reaquire(deviationDirection, calValues, prev_data, timestep):
     prev_data = q[1]
     
     if deviationDirection != 0:
-        time.sleep(timestep/2)
-        return reaquire(deviationDirection, calValues, prev_data, timestep)
+        time.sleep(timestep)
+        return reaquire(deviationDirection, calValues, prev_data, timestep, UltrasonicSensor)
     
     return prev_data
 
@@ -260,7 +268,9 @@ def obstacleTraverse(speed):
     return
 
 def USObstacle(UltrasonicSensor):
+    return False
     dist = queryUltrasonic()
+    print(f"\n\nUS DISTNACE READING {dist}\n\n")
     if dist < UltrasonicSensor.hillDist:
         return True
     return False
@@ -278,7 +288,8 @@ def navigateCourse(LightSensor, UltrasonicSensor, IMU, timestep, speed, mag_coun
     # print(f"deviation direction: {deviationDirection}")
     if deviationDirection == 0:
         # checking for obstacle in front of MACRO
-        while USObstacle():
+        while USObstacle(UltrasonicSensor):
+            mv.allStop()
             time.sleep(0.5)
         
         
@@ -318,9 +329,9 @@ def navigateCourse(LightSensor, UltrasonicSensor, IMU, timestep, speed, mag_coun
                     if mag_count == 1:
                         mv.lf(speed)
                         mv.rf(0)
-                        time.sleep(2)
+                        time.sleep(3)
                         mv.fw(speed)
-                        time.sleep(3.5)
+                        time.sleep(0.5)
                         cargo.sleepFwDeploy(4)
                         
                     # if mag_count == 2:
@@ -331,9 +342,9 @@ def navigateCourse(LightSensor, UltrasonicSensor, IMU, timestep, speed, mag_coun
                     if mag_count == 2:
                         mv.lf(speed)
                         mv.rf(0)
-                        time.sleep(2)
+                        time.sleep(3)
                         mv.fw(speed)
-                        time.sleep(3.5)
+                        time.sleep(0.5)
                         cargo.sleepFwDeploy(4)
                     # if mag_count == 3:
                 elif SITE == 3:
@@ -342,12 +353,12 @@ def navigateCourse(LightSensor, UltrasonicSensor, IMU, timestep, speed, mag_coun
                         time.sleep(2)
                     if mag_count == 2:
                         mv.fw(speed * .75)
-                        time.sleep(2)
+                        time.sleep(3)
                         mv.lf(speed)
                         mv.rf(0)
-                        time.sleep(2)
+                        time.sleep(3)
                         mv.fw(speed)
-                        time.sleep(3.5)
+                        time.sleep(0.5)
                         cargo.sleepFwDeploy(4)
                     # if mag_count == 3:
         else:
@@ -376,7 +387,7 @@ def navigateCourse(LightSensor, UltrasonicSensor, IMU, timestep, speed, mag_coun
     else:
         print("Reaquiring...")
         # print(f"calling reaquire prev data {prev_data}")
-        prev_data = reaquire(deviationDirection, LightSensor, prev_data, timestep)
+        prev_data = reaquire(deviationDirection, LightSensor, prev_data, timestep, UltrasonicSensor)
         
         # print(f"finished reaquire: prev data is {prev_data}")
      
@@ -390,7 +401,7 @@ def speedTest(maxSpeed):
     power = (2.2 * maxSpeed) + 3.78
     start = time.time()
     mv.lf(power)
-    mv.rf(power * 0.93)
+    mv.rf(power)
     # mv.fw(power)
     while (time.time() - start) * maxSpeed:
         pass
